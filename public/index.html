@@ -1,181 +1,168 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>File Upload Demo</title>
+    <title>File Upload Demo</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: Arial, sans-serif;
-      background: #f4f4f5;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 500px;
-      padding: 30px;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    }
-
-    h1 {
-      margin-bottom: 8px;
-    }
-
-    p {
-      color: #666;
-      margin-bottom: 25px;
-    }
-
-    .upload-box {
-      border: 2px dashed #aaa;
-      padding: 30px;
-      text-align: center;
-      border-radius: 10px;
-      margin-bottom: 20px;
-    }
-
-    input {
-      margin: 15px 0;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      background: #111;
-      color: white;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    button:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-
-    #status {
-      margin-top: 15px;
-      text-align: center;
-    }
-
-    #preview {
-      margin-top: 20px;
-      text-align: center;
-    }
-
-    #preview img {
-      max-width: 100%;
-      max-height: 300px;
-      border-radius: 8px;
-    }
-  </style>
-</head>
-
-<body>
-
-  <div class="container">
-    <h1>File Upload Demo</h1>
-
-    <p>Upload an image to test our backend.</p>
-
-    <form id="uploadForm">
-
-      <div class="upload-box">
-        <label for="file">Choose an image</label>
-
-        <br />
-
-        <input
-          type="file"
-          id="file"
-          name="file"
-          accept="image/*"
-          required
-        />
-      </div>
-
-      <button type="submit" id="uploadBtn">
-        Upload
-      </button>
-
-    </form>
-
-    <div id="status"></div>
-
-    <div id="preview"></div>
-  </div>
-
-  <script>
-    const form = document.getElementById("uploadForm");
-    const fileInput = document.getElementById("file");
-    const uploadBtn = document.getElementById("uploadBtn");
-    const status = document.getElementById("status");
-    const preview = document.getElementById("preview");
-
-    form.addEventListener("submit", async (event) => {
-      event.preventDefault();
-
-      const file = fileInput.files[0];
-
-      if (!file) {
-        status.textContent = "Please select a file.";
-        return;
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
       }
 
-      const formData = new FormData();
+      body {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: Arial, sans-serif;
+        background: #f4f4f5;
+      }
 
-      formData.append("file", file);
+      .container {
+        width: 100%;
+        max-width: 500px;
+        padding: 30px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      }
 
-      uploadBtn.disabled = true;
-      status.textContent = "Uploading...";
-      preview.innerHTML = "";
+      h1 {
+        margin-bottom: 8px;
+      }
 
-      try {
-        const response = await fetch("/api/upload", {
-          method: "POST",
-          body: formData,
-        });
+      p {
+        color: #666;
+        margin-bottom: 25px;
+      }
 
-        const data = await response.json();
+      .upload-box {
+        border: 2px dashed #aaa;
+        padding: 30px;
+        text-align: center;
+        border-radius: 10px;
+        margin-bottom: 20px;
+      }
 
-        if (!response.ok) {
-          throw new Error(data.message || "Upload failed");
+      input {
+        margin: 15px 0;
+      }
+
+      button {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        background: #111;
+        color: white;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      #status {
+        margin-top: 15px;
+        text-align: center;
+      }
+
+      #preview {
+        margin-top: 20px;
+        text-align: center;
+      }
+
+      #preview img {
+        max-width: 100%;
+        max-height: 300px;
+        border-radius: 8px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>File Upload Demo</h1>
+
+      <p>Upload an image to test our backend.</p>
+
+      <form id="uploadForm">
+        <div class="upload-box">
+          <label for="file">Choose an image</label>
+
+          <br />
+
+          <input type="file" id="file" name="file" accept="image/*" required />
+        </div>
+
+        <button type="submit" id="uploadBtn">Upload</button>
+      </form>
+
+      <div id="status"></div>
+
+      <div id="preview"></div>
+    </div>
+
+    <script>
+      const form = document.getElementById("uploadForm");
+      const fileInput = document.getElementById("file");
+      const uploadBtn = document.getElementById("uploadBtn");
+      const status = document.getElementById("status");
+      const preview = document.getElementById("preview");
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const file = fileInput.files[0];
+
+        if (!file) {
+          status.textContent = "Please select a file.";
+          return;
         }
 
-        status.textContent = data.message;
+        const formData = new FormData();
 
-        if (data.file) {
-          const imageUrl = `/uploads/${data.file.filename}`;
+        formData.append("file", file);
 
-          preview.innerHTML = `
+        uploadBtn.disabled = true;
+        status.textContent = "Uploading...";
+        preview.innerHTML = "";
+
+        try {
+          const response = await fetch("/api/upload", {
+            method: "POST",
+            body: formData,
+          });
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            throw new Error(data.message || "Upload failed");
+          }
+
+          status.textContent = data.message;
+
+          if (data.data?.url) {
+            const imageUrl = data.data.url;
+
+            preview.innerHTML = `
             <h3>Uploaded Image</h3>
             <br />
             <img src="${imageUrl}" alt="Uploaded image" />
           `;
+          }
+        } catch (error) {
+          status.textContent = error.message;
+        } finally {
+          uploadBtn.disabled = false;
         }
-
-      } catch (error) {
-        status.textContent = error.message;
-      } finally {
-        uploadBtn.disabled = false;
-      }
-    });
-  </script>
-
-</body>
+      });
+    </script>
+  </body>
 </html>

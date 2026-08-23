@@ -1,0 +1,24 @@
+import supabase from "../../config/supabase.js";
+
+export const uploadFileService = async (file) => {
+  const fileName = `${Date.now()}-${file.originalname}`;
+
+  const { data, error } = await supabase.storage
+    .from("uploads")
+    .upload(fileName, file.buffer, {
+      contentType: file.mimetype,
+    });
+
+  if (error) {
+    throw error;
+  }
+
+  const { data: publicUrlData } = supabase.storage
+    .from("uploads")
+    .getPublicUrl(fileName);
+
+  return {
+    path: data.path,
+    url: publicUrlData.publicUrl,
+  };
+};
