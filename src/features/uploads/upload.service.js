@@ -33,3 +33,14 @@ export const deleteFileService = async (fileName) => {
   }
   return data;
 };
+
+export const deleteFilesService = async (fileNames) => {
+  const { data, error } = await supabase.storage
+    .from("uploads")
+    .remove(fileNames);
+
+  if (error) {
+    throw error;
+  }
+  return data;
+};
