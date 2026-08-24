@@ -22,3 +22,14 @@ export const uploadFileService = async (file) => {
     url: publicUrlData.publicUrl,
   };
 };
+
+export const deleteFileService = async (fileName) => {
+  const { data, error } = await supabase.storage
+    .from("uploads")
+    .remove([fileName]);
+
+  if (error) {
+    throw error;
+  }
+  return data;
+};
